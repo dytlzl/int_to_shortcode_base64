@@ -32,12 +32,15 @@ def sc2int(shortcode):
             binary += '111111'
         else:
             asc = int(ord(i))
-            if asc > 96:
+            if asc > 96 and asc < 123:
                 binary += format(asc-71, '06b')
-            elif asc > 64:
+            elif asc > 64 and asc < 91:
                 binary += format(asc-65, '06b')
-            elif asc > 47:
+            elif asc > 47 and asc < 58:
                 binary += format(asc+4, '06b')
+            else:
+                print("Error: invalid string")
+                return
     result = int(binary, 2)
     print(result)
 
