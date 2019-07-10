@@ -2,30 +2,42 @@ from sys import argv
 import json
 
 
-def split(s, n):
-    return [s[i:i+n] for i in range(0, len(s), n)]
-
-
-def int2sc():
-    bin_int = format(int(argv[1]),'b').zfill(60)
-    s = split(bin_int, 6)
-    table_json = open('base64_table.json', 'r')
-    dictionary = json.loads(table_json.read())
+def int2sc(decimal):
+    bin_int = format(int(decimal),'b')
+    bin_int = bin_int.zfill(((len(bin_int)+5)//6)*6)
+    s = [bin_int[i:i+6] for i in range(0, len(bin_int), 6)]
     result = ''
     for i in s:
-        result += dictionary[i]
+        if i == '111110':
+            result += '-'
+        elif i == '111111':
+            result += '_'
+        else:
+            integer = int(i, 2)
+            if integer > 51:
+                result += chr(integer-4)
+            elif integer > 25:
+                result += chr(integer+71)
+            else:
+                result += chr(integer+65)
     print(result)
 
 
-def sc2int():
-    shortcode = argv[1]
-    s = split(shortcode, 1)
-    table_json = open('base64_table.json', 'r')
-    dict = json.loads(table_json.read())
-    dict = {v:k for k, v in dict.items()}
+def sc2int(shortcode):
     binary = ''
-    for i in s:
-        binary += dict[i]
+    for i in shortcode:
+        if i == '-':
+            binary += '111110'
+        elif i == '_':
+            binary += '111111'
+        else:
+            asc = int(ord(i))
+            if asc > 96:
+                binary += format(asc-71, '06b')
+            elif asc > 64:
+                binary += format(asc-65, '06b')
+            elif asc > 47:
+                binary += format(asc+4, '06b')
     result = int(binary, 2)
     print(result)
 
@@ -33,6 +45,6 @@ def sc2int():
 if __name__ == '__main__':
     target = argv[1]
     if target.isdecimal():
-        int2sc()
+        int2sc(target)
     else:
-        sc2int()
+        sc2int(target)
