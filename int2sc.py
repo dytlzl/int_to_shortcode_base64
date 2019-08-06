@@ -1,9 +1,8 @@
 from sys import argv
-import json
 
 
 def int2sc(decimal):
-    bin_int = format(int(decimal),'b')
+    bin_int = format(int(decimal), 'b')
     bin_int = bin_int.zfill(((len(bin_int)+5)//6)*6)
     s = [bin_int[i:i+6] for i in range(0, len(bin_int), 6)]
     result = ''
@@ -32,11 +31,11 @@ def sc2int(shortcode):
             binary += '111111'
         else:
             asc = int(ord(i))
-            if asc > 96 and asc < 123:
+            if 96 < asc < 123:
                 binary += format(asc-71, '06b')
-            elif asc > 64 and asc < 91:
+            elif 64 < asc < 91:
                 binary += format(asc-65, '06b')
-            elif asc > 47 and asc < 58:
+            elif 47 < asc < 58:
                 binary += format(asc+4, '06b')
             else:
                 print("Error: invalid string")
